@@ -23,41 +23,19 @@
     <div class="container">
       <div class="nav-inner">
         <a href="#home" class="nav-logo" aria-label="Astral Tech Advisors Home">
-          <!-- Gradient ATA mark — inline SVG, no image file needed -->
-          <svg class="nav-logo-mark" viewBox="0 0 38 42" width="38" height="42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="ataGradNav" x1="0" y1="42" x2="38" y2="0" gradientUnits="userSpaceOnUse">
-                <stop offset="0%"   stop-color="#7C3AED"/>
-                <stop offset="55%"  stop-color="#06B6D4"/>
-                <stop offset="100%" stop-color="#C026D3"/>
-              </linearGradient>
-            </defs>
-            <!-- Orbital ellipse -->
-            <ellipse cx="19" cy="27" rx="18" ry="9" stroke="url(#ataGradNav)" stroke-width="2" transform="rotate(-22 19 27)"/>
-            <!-- Triangle / A shape (filled softly) -->
-            <path d="M19 14 L35 40 L3 40 Z" fill="url(#ataGradNav)" fill-opacity="0.15" stroke="url(#ataGradNav)" stroke-width="2.5" stroke-linejoin="round"/>
-            <!-- A crossbar -->
-            <line x1="10" y1="33" x2="28" y2="33" stroke="url(#ataGradNav)" stroke-width="2" stroke-linecap="round"/>
-            <!-- Upward arrow from apex -->
-            <line x1="19" y1="14" x2="19" y2="5" stroke="url(#ataGradNav)" stroke-width="2" stroke-linecap="round"/>
-            <polyline points="16,10 19,5 22,10" stroke="url(#ataGradNav)" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
-            <!-- Star at tip -->
-            <circle cx="19" cy="4.5" r="1.8" fill="url(#ataGradNav)"/>
-          </svg>
-          <span class="nav-logo-wordmark">
-            <span class="nav-logo-title">Astral Tech</span>
-            <span class="nav-logo-sub">Advisors</span>
-          </span>
+          <img src="Website Logo.png" alt="Astral Tech Advisors" class="nav-logo-img" />
         </a>
 
         <ul class="nav-links" id="nav-links" role="list">
           <li><a href="#home">Home</a></li>
           <li><a href="#services">Our Services</a></li>
+          <li><a href="#pricing">Pricing</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
 
-        <a href="https://calendly.com" target="_blank" rel="noopener" class="btn btn-primary btn-sm nav-cta" id="nav-book-btn">
+        <!-- TODO: Replace with actual Calendly scheduling page once created -->
+        <a href="https://calendly.com/astraltechadvisors" target="_blank" rel="noopener" class="btn btn-primary btn-sm nav-cta" id="nav-book-btn">
           Book Now <span aria-hidden="true">→</span>
         </a>
 
@@ -74,7 +52,15 @@
        HERO
        ============================================================ -->
   <section class="hero" id="home" aria-label="Hero">
-    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <video
+      class="hero-video"
+      autoplay muted loop playsinline
+      poster="Images/Untitled design.png"
+      preload="none"
+      aria-hidden="true"
+    >
+      <source src="Videos/kling_20260321_VIDEO_Very_slow__2235_0.mp4" type="video/mp4" />
+    </video>
     <div class="hero-overlay" aria-hidden="true"></div>
 
     <!-- Background glow orbs -->
@@ -145,7 +131,18 @@
             optimize, and manage your QuickBooks environment for maximum efficiency
             and accuracy.
           </p>
-          <a href="#contact" class="service-link">Learn more <span aria-hidden="true">→</span></a>
+          <button class="service-link service-toggle" aria-expanded="false" aria-controls="detail-qb">
+            Learn more <span class="service-toggle-arrow" aria-hidden="true">→</span>
+          </button>
+          <div class="service-detail" id="detail-qb">
+            <ul>
+              <li>Full QuickBooks Online/Desktop setup and migration</li>
+              <li>Chart of accounts optimization and cleanup</li>
+              <li>Third-party app integrations (payroll, inventory, POS)</li>
+              <li>Ongoing QBO admin, troubleshooting, and training</li>
+            </ul>
+            <a href="#contact" class="btn btn-ghost btn-sm">Get started <span aria-hidden="true">→</span></a>
+          </div>
         </article>
 
         <!-- Financial Reporting -->
@@ -157,7 +154,18 @@
             delivered on your schedule with narrative insights that turn numbers
             into decisions.
           </p>
-          <a href="#contact" class="service-link">Learn more <span aria-hidden="true">→</span></a>
+          <button class="service-link service-toggle" aria-expanded="false" aria-controls="detail-reporting">
+            Learn more <span class="service-toggle-arrow" aria-hidden="true">→</span>
+          </button>
+          <div class="service-detail" id="detail-reporting">
+            <ul>
+              <li>Monthly/quarterly P&amp;L, balance sheet, and cash-flow statements</li>
+              <li>Narrative insights and trend analysis</li>
+              <li>Custom KPI dashboards tailored to your business</li>
+              <li>Board-ready reporting packages</li>
+            </ul>
+            <a href="#contact" class="btn btn-ghost btn-sm">Get started <span aria-hidden="true">→</span></a>
+          </div>
         </article>
 
         <!-- Strategic Consulting -->
@@ -169,7 +177,18 @@
             KPI dashboards, and strategic planning to keep your business on a
             growth trajectory.
           </p>
-          <a href="#contact" class="service-link">Learn more <span aria-hidden="true">→</span></a>
+          <button class="service-link service-toggle" aria-expanded="false" aria-controls="detail-consulting">
+            Learn more <span class="service-toggle-arrow" aria-hidden="true">→</span>
+          </button>
+          <div class="service-detail" id="detail-consulting">
+            <ul>
+              <li>Annual budgets and rolling forecasts</li>
+              <li>KPI identification and dashboard design</li>
+              <li>Scenario modeling and what-if analysis</li>
+              <li>Strategic growth planning and capital allocation</li>
+            </ul>
+            <a href="#contact" class="btn btn-ghost btn-sm">Get started <span aria-hidden="true">→</span></a>
+          </div>
         </article>
       </div>
     </div>
@@ -259,7 +278,18 @@
             design workflows using n8n, Make, and Zapier for real-time financial
             visibility and speed.
           </p>
-          <a href="#contact" class="service-link">Learn more <span aria-hidden="true">→</span></a>
+          <button class="service-link service-toggle" aria-expanded="false" aria-controls="detail-auto-bookkeeping">
+            Learn more <span class="service-toggle-arrow" aria-hidden="true">→</span>
+          </button>
+          <div class="service-detail" id="detail-auto-bookkeeping">
+            <ul>
+              <li>Custom automation pipelines using n8n, Make, and Zapier</li>
+              <li>Bank-feed and receipt auto-categorization</li>
+              <li>Real-time dashboards for revenue and expenses</li>
+              <li>Error-detection rules and reconciliation automation</li>
+            </ul>
+            <a href="#contact" class="btn btn-ghost btn-sm">Get started <span aria-hidden="true">→</span></a>
+          </div>
         </article>
 
         <!-- Fractional Controller -->
@@ -271,7 +301,18 @@
             We provide scalable financial planning, forecasting, and oversight
             that grows with your business.
           </p>
-          <a href="#contact" class="service-link">Learn more <span aria-hidden="true">→</span></a>
+          <button class="service-link service-toggle" aria-expanded="false" aria-controls="detail-fractional">
+            Learn more <span class="service-toggle-arrow" aria-hidden="true">→</span>
+          </button>
+          <div class="service-detail" id="detail-fractional">
+            <ul>
+              <li>Part-time CFO/controller-level financial leadership</li>
+              <li>Cash-flow forecasting and runway analysis</li>
+              <li>Financial policy and internal controls design</li>
+              <li>Investor/lender reporting and due-diligence support</li>
+            </ul>
+            <a href="#contact" class="btn btn-ghost btn-sm">Get started <span aria-hidden="true">→</span></a>
+          </div>
         </article>
 
         <!-- Bookkeeping Essentials -->
@@ -282,7 +323,18 @@
             A solid foundation for any business. Core monthly reconciliation,
             P&amp;L reporting, and clean books delivered reliably every month.
           </p>
-          <a href="#contact" class="service-link">Learn more <span aria-hidden="true">→</span></a>
+          <button class="service-link service-toggle" aria-expanded="false" aria-controls="detail-essentials">
+            Learn more <span class="service-toggle-arrow" aria-hidden="true">→</span>
+          </button>
+          <div class="service-detail" id="detail-essentials">
+            <ul>
+              <li>Monthly bank and credit-card reconciliation</li>
+              <li>Accounts payable and receivable management</li>
+              <li>Monthly P&amp;L and balance sheet delivery</li>
+              <li>Sales-tax tracking and filing support</li>
+            </ul>
+            <a href="#contact" class="btn btn-ghost btn-sm">Get started <span aria-hidden="true">→</span></a>
+          </div>
         </article>
 
         <!-- Growth-Stage Support -->
@@ -294,7 +346,18 @@
             ERP integrations, reporting dashboards, and controller-level oversight —
             that keeps rapid growth under control.
           </p>
-          <a href="#contact" class="service-link">Learn more <span aria-hidden="true">→</span></a>
+          <button class="service-link service-toggle" aria-expanded="false" aria-controls="detail-growth">
+            Learn more <span class="service-toggle-arrow" aria-hidden="true">→</span>
+          </button>
+          <div class="service-detail" id="detail-growth">
+            <ul>
+              <li>ERP selection, setup, and integration</li>
+              <li>Multi-entity consolidation reporting</li>
+              <li>Department-level P&amp;L and cost-center tracking</li>
+              <li>Scalable processes designed for 10x growth</li>
+            </ul>
+            <a href="#contact" class="btn btn-ghost btn-sm">Get started <span aria-hidden="true">→</span></a>
+          </div>
         </article>
 
         <!-- Custom Engagements -->
@@ -305,7 +368,18 @@
             Have a unique challenge? We tackle one-off projects — from historical
             data cleanups to multi-entity consolidation and everything in between.
           </p>
-          <a href="#contact" class="service-link">Learn more <span aria-hidden="true">→</span></a>
+          <button class="service-link service-toggle" aria-expanded="false" aria-controls="detail-custom">
+            Learn more <span class="service-toggle-arrow" aria-hidden="true">→</span>
+          </button>
+          <div class="service-detail" id="detail-custom">
+            <ul>
+              <li>Historical data cleanup and catch-up bookkeeping</li>
+              <li>Multi-entity or multi-currency consolidation</li>
+              <li>System migrations (QBO, Xero, NetSuite)</li>
+              <li>One-off financial analysis or audit prep</li>
+            </ul>
+            <a href="#contact" class="btn btn-ghost btn-sm">Get started <span aria-hidden="true">→</span></a>
+          </div>
         </article>
 
         <!-- On-Demand Consulting -->
@@ -317,7 +391,80 @@
             question, a strategic review, or to pressure-test your financial models
             before a major decision.
           </p>
-          <a href="#contact" class="service-link">Learn more <span aria-hidden="true">→</span></a>
+          <button class="service-link service-toggle" aria-expanded="false" aria-controls="detail-ondemand">
+            Learn more <span class="service-toggle-arrow" aria-hidden="true">→</span>
+          </button>
+          <div class="service-detail" id="detail-ondemand">
+            <ul>
+              <li>60- or 90-minute expert consulting sessions</li>
+              <li>Financial model review and stress-testing</li>
+              <li>Tax-planning strategy conversations</li>
+              <li>Ad-hoc QuickBooks troubleshooting</li>
+            </ul>
+            <a href="#contact" class="btn btn-ghost btn-sm">Get started <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider" aria-hidden="true"></div>
+
+  <!-- ============================================================
+       PRICING
+       ============================================================ -->
+  <section class="pricing" id="pricing" aria-label="Pricing">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">Pricing</div>
+        <h2>Plans that scale with <span class="gradient-text">your growth</span></h2>
+        <p>Transparent pricing, no hidden fees. Every plan is tailored — these ranges give you a starting point.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Essentials -->
+        <article class="glass-card pricing-card reveal">
+          <div class="pricing-tier">Essentials</div>
+          <div class="pricing-price">Starting at <span class="gradient-text pricing-amount">$500</span>/mo</div>
+          <p class="pricing-desc">A solid financial foundation for early-stage businesses and lean teams.</p>
+          <ul class="pricing-features">
+            <li>Monthly bookkeeping &amp; reconciliation</li>
+            <li>P&amp;L and balance sheet delivery</li>
+            <li>QuickBooks setup &amp; support</li>
+            <li>Email support</li>
+          </ul>
+          <a href="#contact" class="btn btn-ghost">Get Started <span aria-hidden="true">→</span></a>
+        </article>
+
+        <!-- Growth (featured) -->
+        <article class="glass-card pricing-card pricing-card--featured reveal reveal-delay-1">
+          <div class="pricing-badge">Most Popular</div>
+          <div class="pricing-tier">Growth</div>
+          <div class="pricing-price">Starting at <span class="gradient-text pricing-amount">$1,200</span>/mo</div>
+          <p class="pricing-desc">For scaling businesses that need deeper insights and automation.</p>
+          <ul class="pricing-features">
+            <li>Everything in Essentials</li>
+            <li>Automation-driven workflows</li>
+            <li>Custom KPI dashboards</li>
+            <li>Monthly strategy call</li>
+            <li>Priority support</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary">Get Started <span aria-hidden="true">→</span></a>
+        </article>
+
+        <!-- Enterprise -->
+        <article class="glass-card pricing-card reveal reveal-delay-2">
+          <div class="pricing-tier">Enterprise</div>
+          <div class="pricing-price">Starting at <span class="gradient-text pricing-amount">$3,000</span>/mo</div>
+          <p class="pricing-desc">Full fractional controller services and strategic financial leadership.</p>
+          <ul class="pricing-features">
+            <li>Everything in Growth</li>
+            <li>Fractional Controller oversight</li>
+            <li>Multi-entity consolidation</li>
+            <li>Board-ready reporting</li>
+            <li>Dedicated Slack channel</li>
+          </ul>
+          <a href="#contact" class="btn btn-ghost">Contact Us <span aria-hidden="true">→</span></a>
         </article>
       </div>
     </div>
@@ -410,25 +557,7 @@
         <!-- Brand -->
         <div class="footer-brand">
           <a href="#home" class="nav-logo" aria-label="Astral Tech Advisors">
-            <svg class="nav-logo-mark nav-logo-mark--footer" viewBox="0 0 38 42" width="32" height="35" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <defs>
-                <linearGradient id="ataGradFtr" x1="0" y1="42" x2="38" y2="0" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%"   stop-color="#7C3AED"/>
-                  <stop offset="55%"  stop-color="#06B6D4"/>
-                  <stop offset="100%" stop-color="#C026D3"/>
-                </linearGradient>
-              </defs>
-              <ellipse cx="19" cy="27" rx="18" ry="9" stroke="url(#ataGradFtr)" stroke-width="2" transform="rotate(-22 19 27)"/>
-              <path d="M19 14 L35 40 L3 40 Z" fill="url(#ataGradFtr)" fill-opacity="0.15" stroke="url(#ataGradFtr)" stroke-width="2.5" stroke-linejoin="round"/>
-              <line x1="10" y1="33" x2="28" y2="33" stroke="url(#ataGradFtr)" stroke-width="2" stroke-linecap="round"/>
-              <line x1="19" y1="14" x2="19" y2="5" stroke="url(#ataGradFtr)" stroke-width="2" stroke-linecap="round"/>
-              <polyline points="16,10 19,5 22,10" stroke="url(#ataGradFtr)" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
-              <circle cx="19" cy="4.5" r="1.8" fill="url(#ataGradFtr)"/>
-            </svg>
-            <span class="nav-logo-wordmark">
-              <span class="nav-logo-title">Astral Tech</span>
-              <span class="nav-logo-sub">Advisors</span>
-            </span>
+            <img src="Website Logo.png" alt="Astral Tech Advisors" class="nav-logo-img nav-logo-img--footer" />
           </a>
           <p>
             Next-generation bookkeeping and financial consulting for small
@@ -442,6 +571,7 @@
           <ul role="list">
             <li><a href="#home">Home</a></li>
             <li><a href="#services">Our Services</a></li>
+            <li><a href="#pricing">Pricing</a></li>
             <li><a href="#about">About Us</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
