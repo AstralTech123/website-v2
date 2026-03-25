@@ -253,20 +253,39 @@ const $$ = (s, ctx = document) => [...ctx.querySelectorAll(s)];
   form.addEventListener('submit', e => {
     e.preventDefault();
     const originalText = btn.innerHTML;
-    btn.innerHTML = 'Sending… ⟳';
+    btn.innerHTML = 'Sending\u2026 \u27F3';
     btn.disabled = true;
     btn.style.opacity = '0.7';
 
-    /* Simulate network delay (would be replaced with fetch to backend) */
-    setTimeout(() => {
-      btn.innerHTML = '✓ Message Sent!';
-      btn.style.opacity = '1';
-      form.reset();
+    const data = new FormData(form);
+
+    fetch('https://formspree.io/f/xdapndyn', {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    })
+    .then(res => {
+      if (res.ok) {
+        btn.innerHTML = '\u2713 Message Sent!';
+        btn.style.opacity = '1';
+        form.reset();
+      } else {
+        btn.innerHTML = 'Error \u2014 try again';
+        btn.style.opacity = '1';
+      }
       setTimeout(() => {
         btn.innerHTML = originalText;
         btn.disabled = false;
       }, 3000);
-    }, 1200);
+    })
+    .catch(() => {
+      btn.innerHTML = 'Error \u2014 try again';
+      btn.style.opacity = '1';
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }, 3000);
+    });
   });
 })();
 
@@ -281,8 +300,36 @@ const $$ = (s, ctx = document) => [...ctx.querySelectorAll(s)];
   form.addEventListener('submit', e => {
     e.preventDefault();
     const btn = $('button', form);
-    btn.textContent = '✓ Done!';
-    form.reset();
-    setTimeout(() => { btn.textContent = 'Sign Up'; }, 3000);
+    const originalText = btn.textContent;
+    btn.textContent = 'Sending\u2026';
+    btn.disabled = true;
+
+    const data = new FormData(form);
+    data.append('_subject', 'New Newsletter Signup - Astral Tech Advisors');
+
+    fetch('https://formspree.io/f/xdapndyn', {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    })
+    .then(res => {
+      if (res.ok) {
+        btn.textContent = '\u2713 Done!';
+        form.reset();
+      } else {
+        btn.textContent = 'Error';
+      }
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }, 3000);
+    })
+    .catch(() => {
+      btn.textContent = 'Error';
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }, 3000);
+    });
   });
 })();
