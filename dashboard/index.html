@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Astral Tech Advisors - Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #080B1A;
+    color: #E2E8F0;
+    min-height: 100vh;
+    padding: 1rem;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .header h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .header h1 .gradient {
+    background: linear-gradient(135deg, #7C3AED, #06B6D4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+    font-size: 1.1rem;
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .timestamp {
+    color: #64748B;
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+
+  .refresh-btn {
+    background: rgba(124,58,237,0.2);
+    border: 1px solid rgba(124,58,237,0.4);
+    color: #C4B5FD;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .refresh-btn:hover {
+    background: rgba(124,58,237,0.35);
+    border-color: rgba(124,58,237,0.6);
+  }
+
+  .refresh-btn:active {
+    transform: scale(0.97);
+  }
+
+  .refresh-btn.loading {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  /* Cards */
+  .card {
+    background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(6,182,212,0.04));
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 1.25rem;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover {
+    border-color: rgba(124,58,237,0.3);
+  }
+
+  /* KPI Grid */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .kpi-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #06B6D4;
+    margin-bottom: 0.4rem;
+  }
+
+  .kpi-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+  }
+
+  .kpi-value.loading-text {
+    font-size: 0.85rem;
+    color: #64748B;
+    font-weight: 500;
+  }
+
+  .kpi-sub {
+    font-size: 0.7rem;
+    color: #64748B;
+    margin-top: 0.25rem;
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #7C3AED, #06B6D4);
+    transition: width 0.6s ease;
+  }
+
+  /* Section titles */
+  .section-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+
+  .section-title .icon {
+    margin-right: 0.4rem;
+  }
+
+  /* Content sections grid */
+  .sections-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* YouTube table */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -1.25rem;
+    padding: 0 1.25rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 420px;
+  }
+
+  th {
+    text-align: left;
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748B;
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 0.55rem 0.6rem;
+    font-size: 0.8rem;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    vertical-align: middle;
+  }
+
+  .rank-cell {
+    color: #06B6D4;
+    font-weight: 700;
+    font-size: 0.75rem;
+    width: 2rem;
+  }
+
+  .title-cell {
+    color: #E2E8F0;
+    font-weight: 500;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .num-cell {
+    color: #94A3B8;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .badge-green { background: rgba(34,197,94,0.12); color: #4ADE80; border: 1px solid rgba(34,197,94,0.25); }
+  .badge-yellow { background: rgba(234,179,8,0.12); color: #FACC15; border: 1px solid rgba(234,179,8,0.25); }
+  .badge-blue { background: rgba(6,182,212,0.12); color: #22D3EE; border: 1px solid rgba(6,182,212,0.25); }
+  .badge-gray { background: rgba(148,163,184,0.1); color: #94A3B8; border: 1px solid rgba(148,163,184,0.2); }
+
+  /* Metric rows */
+  .metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .metric-row:last-child {
+    border-bottom: none;
+  }
+
+  .metric-label {
+    font-size: 0.8rem;
+    color: #94A3B8;
+    display: flex;
+    align-items: center;
+  }
+
+  .metric-value {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  /* Status dots */
+  .dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .dot-green { background: #22C55E; box-shadow: 0 0 6px rgba(34,197,94,0.4); }
+  .dot-yellow { background: #EAB308; box-shadow: 0 0 6px rgba(234,179,8,0.4); }
+  .dot-red { background: #EF4444; box-shadow: 0 0 6px rgba(239,68,68,0.4); }
+
+  /* Sub-section headers inside cards */
+  .sub-header {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #C4B5FD;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  /* Bottom grid for tools + content */
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Loading skeleton */
+  .skeleton {
+    background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 6px;
+    height: 1rem;
+    width: 60%;
+  }
+
+  .skeleton-lg {
+    height: 1.75rem;
+    width: 45%;
+    margin-bottom: 0.25rem;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Error state */
+  .error-msg {
+    color: #EF4444;
+    font-size: 0.8rem;
+    padding: 0.75rem;
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    color: #475569;
+    font-size: 0.65rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  /* Desktop breakpoints */
+  @media (min-width: 640px) {
+    body { padding: 1.5rem; }
+    .header h1 { font-size: 1.5rem; }
+    .header h1 .gradient { font-size: 1.35rem; }
+    .kpi-value { font-size: 2rem; }
+    .kpi-grid { gap: 1rem; }
+  }
+
+  @media (min-width: 768px) {
+    body { padding: 2rem; }
+    .header { flex-direction: row; align-items: center; justify-content: space-between; }
+    .kpi-grid { grid-template-columns: repeat(4, 1fr); }
+    .sections-grid { grid-template-columns: 1.5fr 1fr; }
+    .bottom-grid { grid-template-columns: 1fr 1fr; }
+    .title-cell { max-width: 300px; }
+  }
+
+  @media (min-width: 1024px) {
+    .kpi-value { font-size: 2.25rem; }
+    td { font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>
+      Astral Tech Advisors
+      <span class="gradient">Command Center</span>
+    </h1>
+    <div class="header-meta">
+      <span class="timestamp" id="timestamp">Loading...</span>
+      <button class="refresh-btn" id="refreshBtn" onclick="refreshData()">Refresh</button>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="card">
+      <div class="kpi-label">Subscribers</div>
+      <div class="kpi-value" id="kpi-subs"><div class="skeleton skeleton-lg"></div></div>
+      <div class="kpi-sub" id="kpi-subs-sub">via YouTube Data API</div>
+    </div>
+    <div class="card">
+      <div class="kpi-label">Total Views</div>
+      <div class="kpi-value" id="kpi-views"><div class="skeleton skeleton-lg"></div></div>
+      <div class="kpi-sub" id="kpi-views-sub">across all videos</div>
+    </div>
+    <div class="card">
+      <div class="kpi-label">Videos Published</div>
+      <div class="kpi-value" id="kpi-videos"><div class="skeleton skeleton-lg"></div></div>
+      <div class="kpi-sub" id="kpi-videos-sub">on the channel</div>
+    </div>
+    <div class="card">
+      <div class="kpi-label">Revenue Pipeline</div>
+      <div class="kpi-value">$0</div>
+      <div class="kpi-sub">of $1,000 target</div>
+      <div class="progress-track"><div class="progress-fill" style="width: 0%"></div></div>
+    </div>
+  </div>
+
+  <!-- YouTube Performance + Sales Pipeline -->
+  <div class="sections-grid">
+    <div class="card">
+      <div class="section-title">YouTube Performance</div>
+      <div id="youtube-table-area">
+        <div style="padding: 2rem 0; text-align: center;">
+          <div class="skeleton" style="width: 80%; margin: 0 auto 0.5rem;"></div>
+          <div class="skeleton" style="width: 70%; margin: 0 auto 0.5rem;"></div>
+          <div class="skeleton" style="width: 75%; margin: 0 auto 0.5rem;"></div>
+          <div class="skeleton" style="width: 65%; margin: 0 auto 0.5rem;"></div>
+          <div class="skeleton" style="width: 72%; margin: 0 auto;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Sales Pipeline</div>
+      <div class="metric-row"><span class="metric-label">Total Prospects</span><span class="metric-value">39</span></div>
+      <div class="metric-row"><span class="metric-label">Contacted</span><span class="metric-value">2</span></div>
+      <div class="metric-row"><span class="metric-label">Responded</span><span class="metric-value">0</span></div>
+      <div class="metric-row"><span class="metric-label">Closed Won</span><span class="metric-value">0</span></div>
+
+      <div class="sub-header">Active Outreach</div>
+      <div class="metric-row">
+        <span class="metric-label"><span class="dot dot-yellow"></span>Huper</span>
+        <span class="metric-value">Follow up 3/28</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label"><span class="dot dot-yellow"></span>Emily Crawford</span>
+        <span class="metric-value">Follow up 3/30</span>
+      </div>
+
+      <div class="sub-header">Revenue Goal</div>
+      <div class="metric-row"><span class="metric-label">Current</span><span class="metric-value">$0 / $1,000</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width: 0%"></div></div>
+    </div>
+  </div>
+
+  <!-- Fred's Tools + Content Pipeline -->
+  <div class="bottom-grid">
+    <div class="card">
+      <div class="section-title">Fred's Tools</div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-green"></span>YouTube API</span><span class="metric-value">Live</span></div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-yellow"></span>Google Drive</span><span class="metric-value">Limited</span></div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-green"></span>GA4</span><span class="metric-value">Live</span></div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-green"></span>Search Console</span><span class="metric-value">Live</span></div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-green"></span>GitHub</span><span class="metric-value">Live</span></div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-red"></span>YouTube Analytics</span><span class="metric-value">Needed</span></div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-red"></span>Gmail</span><span class="metric-value">Needed</span></div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-red"></span>Calendar</span><span class="metric-value">Needed</span></div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-red"></span>QuickBooks</span><span class="metric-value">Needed</span></div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-red"></span>HeyGen</span><span class="metric-value">Needed</span></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Content Pipeline</div>
+      <div class="metric-row"><span class="metric-label">Scripts on Drive</span><span class="metric-value">6</span></div>
+      <div class="metric-row"><span class="metric-label">Ready for HeyGen</span><span class="metric-value">3</span></div>
+      <div class="metric-row"><span class="metric-label">Posted this week</span><span class="metric-value">5</span></div>
+
+      <div class="sub-header">Script Queue</div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-green"></span>CFOs + AI</span><span class="badge badge-green">Posted</span></div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-green"></span>Claude Updates Short</span><span class="badge badge-green">Posted</span></div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-blue"></span>AI Agent Team</span><span class="badge badge-blue">On Drive</span></div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-blue"></span>Claude APIs Finance</span><span class="badge badge-blue">On Drive</span></div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-blue"></span>Wall St. Bookkeeper v2</span><span class="badge badge-blue">On Drive</span></div>
+      <div class="metric-row"><span class="metric-label"><span class="dot dot-yellow"></span>Botkeeper Shutdown</span><span class="badge badge-gray">Planned</span></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    Built by Fred | Astral Tech Advisors
+  </div>
+
+</div>
+
+<script>
+  const API_KEY = 'AIzaSyAs_7Krxm905B0X2rI70eLnBmm_8V4OD0c';
+  const CHANNEL_ID = 'UCJH81_VMl-AT5xuPI2ppnHw';
+
+  function formatNumber(n) {
+    if (n === null || n === undefined) return '...';
+    return Number(n).toLocaleString('en-US');
+  }
+
+  function getStatusBadge(views) {
+    if (views >= 1000) return '<span class="badge badge-green">1K Club</span>';
+    if (views >= 500) return '<span class="badge badge-yellow">Rising</span>';
+    if (views >= 100) return '<span class="badge badge-blue">New</span>';
+    return '<span class="badge badge-gray">Building</span>';
+  }
+
+  function updateTimestamp() {
+    const now = new Date();
+    const opts = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
+    document.getElementById('timestamp').textContent = 'Last refreshed: ' + now.toLocaleDateString('en-US', opts);
+  }
+
+  async function fetchChannelStats() {
+    const url = `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${API_KEY}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Channel stats request failed');
+    const data = await res.json();
+    if (!data.items || data.items.length === 0) throw new Error('Channel not found');
+    return data.items[0].statistics;
+  }
+
+  async function fetchAllVideoIds() {
+    // Get the uploads playlist ID
+    const channelUrl = `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${CHANNEL_ID}&key=${API_KEY}`;
+    const channelRes = await fetch(channelUrl);
+    if (!channelRes.ok) throw new Error('Failed to fetch channel details');
+    const channelData = await channelRes.json();
+    const uploadsPlaylistId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
+
+    // Paginate through the uploads playlist
+    let videoIds = [];
+    let nextPageToken = '';
+    do {
+      const plUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=50&pageToken=${nextPageToken}&key=${API_KEY}`;
+      const plRes = await fetch(plUrl);
+      if (!plRes.ok) throw new Error('Failed to fetch playlist items');
+      const plData = await plRes.json();
+      for (const item of plData.items) {
+        videoIds.push({
+          id: item.snippet.resourceId.videoId,
+          title: item.snippet.title,
+          publishedAt: item.snippet.publishedAt
+        });
+      }
+      nextPageToken = plData.nextPageToken || '';
+    } while (nextPageToken);
+
+    return videoIds;
+  }
+
+  async function fetchVideoStats(videoItems) {
+    if (videoItems.length === 0) return [];
+    // Batch video IDs (max 50 per request)
+    const batches = [];
+    for (let i = 0; i < videoItems.length; i += 50) {
+      batches.push(videoItems.slice(i, i + 50));
+    }
+
+    let results = [];
+    for (const batch of batches) {
+      const ids = batch.map(v => v.id).join(',');
+      const url = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${ids}&key=${API_KEY}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Failed to fetch video statistics');
+      const data = await res.json();
+      for (const item of data.items) {
+        const meta = videoItems.find(v => v.id === item.id);
+        results.push({
+          id: item.id,
+          title: meta ? meta.title : 'Unknown',
+          views: parseInt(item.statistics.viewCount || '0', 10),
+          likes: parseInt(item.statistics.likeCount || '0', 10),
+          comments: parseInt(item.statistics.commentCount || '0', 10)
+        });
+      }
+    }
+
+    // Sort by views descending
+    results.sort((a, b) => b.views - a.views);
+    return results;
+  }
+
+  function renderVideoTable(videos) {
+    const area = document.getElementById('youtube-table-area');
+    if (videos.length === 0) {
+      area.innerHTML = '<div class="error-msg">No videos found</div>';
+      return;
+    }
+
+    let html = '<div class="table-wrap"><table>';
+    html += '<thead><tr><th>#</th><th>Video</th><th style="text-align:right">Views</th><th style="text-align:right">Likes</th><th>Status</th></tr></thead>';
+    html += '<tbody>';
+    videos.forEach((v, i) => {
+      html += `<tr>
+        <td class="rank-cell">${i + 1}</td>
+        <td class="title-cell" title="${v.title.replace(/"/g, '&quot;')}">${v.title}</td>
+        <td class="num-cell">${formatNumber(v.views)}</td>
+        <td class="num-cell">${formatNumber(v.likes)}</td>
+        <td>${getStatusBadge(v.views)}</td>
+      </tr>`;
+    });
+    html += '</tbody></table></div>';
+    area.innerHTML = html;
+  }
+
+  function showError(elementId, message) {
+    const el = document.getElementById(elementId);
+    if (el) el.innerHTML = `<div class="error-msg">${message}</div>`;
+  }
+
+  function setKPI(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
+
+  async function refreshData() {
+    const btn = document.getElementById('refreshBtn');
+    btn.classList.add('loading');
+    btn.textContent = 'Loading...';
+
+    // Reset KPIs to loading state
+    ['kpi-subs', 'kpi-views', 'kpi-videos'].forEach(id => {
+      document.getElementById(id).innerHTML = '<div class="skeleton skeleton-lg"></div>';
+    });
+    document.getElementById('youtube-table-area').innerHTML = `
+      <div style="padding: 2rem 0; text-align: center;">
+        <div class="skeleton" style="width: 80%; margin: 0 auto 0.5rem;"></div>
+        <div class="skeleton" style="width: 70%; margin: 0 auto 0.5rem;"></div>
+        <div class="skeleton" style="width: 75%; margin: 0 auto 0.5rem;"></div>
+        <div class="skeleton" style="width: 65%; margin: 0 auto 0.5rem;"></div>
+        <div class="skeleton" style="width: 72%; margin: 0 auto;"></div>
+      </div>`;
+
+    // Fetch channel stats and video data in parallel
+    try {
+      const [channelStats, videoItems] = await Promise.all([
+        fetchChannelStats(),
+        fetchAllVideoIds()
+      ]);
+
+      setKPI('kpi-subs', formatNumber(channelStats.subscriberCount));
+      setKPI('kpi-views', formatNumber(channelStats.viewCount));
+      setKPI('kpi-videos', formatNumber(channelStats.videoCount));
+
+      try {
+        const videos = await fetchVideoStats(videoItems);
+        renderVideoTable(videos);
+      } catch (err) {
+        console.error('Video stats error:', err);
+        showError('youtube-table-area', 'Unable to load video details. Try refreshing.');
+      }
+    } catch (err) {
+      console.error('Channel stats error:', err);
+      setKPI('kpi-subs', '...');
+      setKPI('kpi-views', '...');
+      setKPI('kpi-videos', '...');
+      showError('youtube-table-area', 'Unable to load YouTube data. Check API key or try again later.');
+    }
+
+    updateTimestamp();
+    btn.classList.remove('loading');
+    btn.textContent = 'Refresh';
+  }
+
+  // Load data on page load
+  document.addEventListener('DOMContentLoaded', refreshData);
+</script>
+
+</body>
+</html>
