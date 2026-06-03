@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6TT062SGS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G6TT062SGS');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discovery Workbook | Astral Tech Advisors</title>
+  <meta name="description"
+    content="Tell us about your business. A few quick questions help us prepare for a first conversation that's useful from minute one." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="landing.css" />
+
+  <!-- ============================================================
+       DISCOVERY-PAGE SPECIFIC STYLES
+       (extends the shared design tokens in index.css)
+       ============================================================ -->
+  <style>
+    .disc-form { display: flex; flex-direction: column; gap: 1.75rem; max-width: 860px; margin-inline: auto; }
+
+    .disc-section { padding: var(--space-lg); }
+    .disc-section h2 {
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      color: var(--clr-white);
+      margin: 0.25rem 0 0.4rem;
+    }
+    .disc-section .disc-lead { font-size: 0.94rem; margin: 0 0 1.5rem; }
+
+    .disc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .form-group--full { grid-column: 1 / -1; }
+
+    /* Selects styled to match the existing input/textarea look */
+    .form-group select {
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid var(--clr-border);
+      border-radius: var(--radius-sm);
+      padding: 0.8rem 2.5rem 0.8rem 1rem;
+      color: var(--clr-white);
+      font-family: var(--ff-base);
+      font-size: 0.95rem;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      transition: border-color var(--dur-fast), box-shadow var(--dur-fast), background var(--dur-fast);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2394A3B8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+    }
+    .form-group select:focus {
+      border-color: var(--clr-violet);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.18);
+      background-color: rgba(124,58,237,0.06);
+    }
+    .form-group select option { background: var(--clr-bg-2); color: var(--clr-text); }
+
+    .disc-hint { font-size: 0.78rem; color: rgba(148,163,184,0.85); margin-top: 0.35rem; }
+    .req { color: var(--clr-cyan); margin-left: 0.15rem; }
+
+    /* ── Interest chips (the service picker) ── */
+    .interest-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.7rem;
+    }
+    .interest-chip { position: relative; }
+    .interest-chip input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .interest-chip label {
+      display: flex; align-items: center; gap: 0.65rem;
+      padding: 0.85rem 1rem;
+      border: 1.5px solid var(--clr-border);
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.03);
+      color: var(--clr-muted);
+      font-size: 0.9rem; font-weight: var(--fw-medium);
+      cursor: pointer;
+      transition: border-color var(--dur-fast), background var(--dur-fast), color var(--dur-fast), box-shadow var(--dur-fast);
+    }
+    .interest-chip label .chip-box {
+      width: 18px; height: 18px; flex-shrink: 0;
+      border: 1.5px solid var(--clr-border);
+      border-radius: 5px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; color: transparent;
+      transition: all var(--dur-fast);
+    }
+    .interest-chip label:hover { border-color: rgba(124,58,237,0.45); color: var(--clr-text); }
+    .interest-chip input:checked + label {
+      border-color: var(--clr-violet);
+      background: rgba(124,58,237,0.12);
+      color: var(--clr-white);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.14);
+    }
+    .interest-chip input:checked + label .chip-box {
+      background: var(--grad-accent); border-color: transparent; color: var(--clr-white);
+    }
+    .interest-chip input:focus-visible + label { outline: 2px solid var(--clr-cyan); outline-offset: 2px; }
+
+    /* ── Choice pills (single-select radios) ── */
+    .choice-row { display: flex; flex-wrap: wrap; gap: 0.55rem; }
+    .choice { position: relative; }
+    .choice input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .choice label {
+      display: inline-flex; align-items: center;
+      padding: 0.5rem 1.1rem;
+      border: 1.5px solid var(--clr-border);
+      border-radius: var(--radius-pill);
+      background: rgba(255,255,255,0.03);
+      color: var(--clr-muted);
+      font-size: 0.86rem; font-weight: var(--fw-medium);
+      cursor: pointer;
+      transition: all var(--dur-fast);
+    }
+    .choice label:hover { border-color: rgba(6,182,212,0.45); color: var(--clr-text); }
+    .choice input:checked + label {
+      border-color: var(--clr-cyan);
+      background: rgba(6,182,212,0.12);
+      color: var(--clr-white);
+      box-shadow: 0 0 0 3px rgba(6,182,212,0.14);
+    }
+    .choice input:focus-visible + label { outline: 2px solid var(--clr-cyan); outline-offset: 2px; }
+
+    /* ── Conditional (payroll) section ── */
+    #section-payroll[hidden] { display: none; }
+    #section-payroll {
+      animation: fadeSlideIn 0.5s var(--ease-out) both;
+      border-color: rgba(6,182,212,0.35);
+    }
+
+    /* ── Submit row ── */
+    .disc-submit-row { display: flex; flex-direction: column; align-items: center; gap: 0.9rem; text-align: center; }
+    .disc-submit-row .btn { font-size: 1rem; padding: 0.95rem 2.4rem; }
+    .disc-privacy { font-size: 0.8rem; color: rgba(148,163,184,0.8); max-width: 460px; margin: 0 auto; }
+
+    /* ── Success panel ── */
+    #disc-success[hidden] { display: none; }
+    .disc-success-icon { font-size: 2.4rem; margin-bottom: 0.5rem; }
+
+    @media (max-width: 640px) {
+      .disc-grid { grid-template-columns: 1fr; }
+      .disc-section { padding: var(--space-md); }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Full-page background star canvas (animated by main.js) -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <!-- ============================================================
+       NAVBAR
+       ============================================================ -->
+  <nav class="navbar scrolled" id="navbar" aria-label="Main navigation">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-logo" aria-label="Astral Tech Advisors Home">
+          <img src="Website Logo.png" alt="Astral Tech Advisors" class="nav-logo-img" />
+        </a>
+        <ul class="nav-links" id="nav-links" role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#services">Our Services</a></li>
+          <li><a href="index.html#pricing">Pricing</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+        <a href="https://calendly.com/contact-astraltechadvisors/30min" target="_blank" rel="noopener"
+          class="btn btn-primary btn-sm nav-cta">Book Now <span aria-hidden="true">→</span></a>
+        <button class="hamburger" id="hamburger" aria-label="Toggle mobile menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <header class="landing-hero">
+    <div class="hero-overlay"></div>
+    <div class="orb orb-violet" style="width:500px;height:500px;top:-100px;left:-120px;"></div>
+    <div class="orb orb-cyan" style="width:380px;height:380px;top:40px;right:-100px;"></div>
+    <div class="container">
+      <div class="landing-hero-content">
+        <a href="index.html" class="back-link">← Back to site</a>
+        <div class="section-label">Discovery Workbook</div>
+        <h1>Let's get to know <span class="gradient-text">your business</span></h1>
+        <p class="hero-subtitle">
+          A few quick questions help us understand how you run day to day, so our first
+          conversation is useful from minute one. Takes about ten minutes, and everything
+          except your name and email is optional. There's no wrong way to fill it out.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       FORM
+       ============================================================ -->
+  <main class="landing-main">
+    <div class="container">
+
+      <!-- ============================================================
+           SUBMISSION ENDPOINT   (PENDING FINAL ROUTING)
+           Currently points at the SHARED Formspree form (same id the
+           contact form uses), so submissions reach contact@ for now.
+           To route to ALL FOUR (contact@, austin@, Johan@, Greg@):
+           create a dedicated Formspree form whose recipient is a group
+           alias (e.g. leads@astraltechadvisors.com) and replace the
+           form id in the action below. Full steps in:
+           OneDrive/Desktop/Work/Astral Tech Advisors/Client Onboarding/
+           Discovery Web Form - Setup & Status.md
+           ============================================================ -->
+      <form class="disc-form" id="discovery-form"
+            action="https://formspree.io/f/xdapndyn" method="POST">
+
+        <!-- Formspree config + spam honeypot -->
+        <input type="hidden" name="_subject" value="New Discovery Workbook Submission (Astral Tech Advisors)" />
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true"
+               style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" />
+
+        <!-- ── 01 · About you ── -->
+        <section class="glass-card disc-section reveal">
+          <div class="section-label">01 · About you</div>
+          <h2>Your details</h2>
+          <p class="disc-lead">So we know who we're talking to and how to reach you.</p>
+
+          <div class="disc-grid">
+            <div class="form-group">
+              <label for="name">Your name <span class="req" aria-hidden="true">*</span></label>
+              <input type="text" id="name" name="Name" placeholder="Jane Smith" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+              <input type="email" id="email" name="email" placeholder="jane@company.com" required />
+            </div>
+            <div class="form-group">
+              <label for="business">Business name</label>
+              <input type="text" id="business" name="Business Name" placeholder="Acme Insurance Group" />
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone <span class="disc-hint" style="text-transform:none;letter-spacing:0;display:inline;margin:0;">(optional)</span></label>
+              <input type="tel" id="phone" name="Phone" placeholder="(404) 555-0199" />
+            </div>
+          </div>
+        </section>
+
+        <!-- ── 02 · What you need (service picker) ── -->
+        <section class="glass-card disc-section reveal">
+          <div class="section-label">02 · What you need</div>
+          <h2>What can we help with?</h2>
+          <p class="disc-lead">
+            Pick anything that's on your mind. Choose as many as apply, or "Not sure yet"
+            and we'll figure it out together.
+          </p>
+
+          <div class="interest-grid">
+            <div class="interest-chip">
+              <input type="checkbox" id="i-bookkeeping" name="Services of Interest" value="Bookkeeping Essentials" />
+              <label for="i-bookkeeping"><span class="chip-box" aria-hidden="true">✓</span> Bookkeeping Essentials</label>
+            </div>
+            <div class="interest-chip">
+              <input type="checkbox" id="i-automation" name="Services of Interest" value="Automation-Driven Bookkeeping" />
+              <label for="i-automation"><span class="chip-box" aria-hidden="true">✓</span> Automation-Driven Bookkeeping</label>
+            </div>
+            <div class="interest-chip">
+              <input type="checkbox" id="interest-payroll" name="Services of Interest" value="Payroll &amp; Commission Processing" />
+              <label for="interest-payroll"><span class="chip-box" aria-hidden="true">✓</span> Payroll &amp; Commission Processing</label>
+            </div>
+            <div class="interest-chip">
+              <input type="checkbox" id="i-reporting" name="Services of Interest" value="Financial Reporting" />
+              <label for="i-reporting"><span class="chip-box" aria-hidden="true">✓</span> Financial Reporting</label>
+            </div>
+            <div class="interest-chip">
+              <input type="checkbox" id="i-consulting" name="Services of Interest" value="Strategic Consulting" />
+              <label for="i-consulting"><span class="chip-box" aria-hidden="true">✓</span> Strategic Consulting</label>
+            </div>
+            <div class="interest-chip">
+              <input type="checkbox" id="i-fractional" name="Services of Interest" value="Fractional Controller" />
+              <label for="i-fractional"><span class="chip-box" aria-hidden="true">✓</span> Fractional Controller</label>
+            </div>
+            <div class="interest-chip">
+              <input type="checkbox" id="i-growth" name="Services of Interest" value="Growth-Stage Support" />
+              <label for="i-growth"><span class="chip-box" aria-hidden="true">✓</span> Growth-Stage Support</label>
+            </div>
+            <div class="interest-chip">
+              <input type="checkbox" id="i-quickbooks" name="Services of Interest" value="QuickBooks Advisory" />
+              <label for="i-quickbooks"><span class="chip-box" aria-hidden="true">✓</span> QuickBooks Advisory</label>
+            </div>
+            <div class="interest-chip">
+              <input type="checkbox" id="i-unsure" name="Services of Interest" value="Not sure yet" />
+              <label for="i-unsure"><span class="chip-box" aria-hidden="true">✓</span> Not sure yet / Other</label>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── 03 · Your business ── -->
+        <section class="glass-card disc-section reveal">
+          <div class="section-label">03 · Your business</div>
+          <h2>About your business</h2>
+          <p class="disc-lead">Rough answers are fine. Skip anything that doesn't apply.</p>
+
+          <div class="disc-grid">
+            <div class="form-group form-group--full">
+              <label for="industry">What does your business do?</label>
+              <input type="text" id="industry" name="Industry / What the business does"
+                placeholder="e.g. Independent insurance agency (P&amp;C and life), retail, SaaS…" />
+            </div>
+            <div class="form-group">
+              <label for="tenure">How long in business?</label>
+              <input type="text" id="tenure" name="Years in Business" placeholder="e.g. 6 years" />
+            </div>
+            <div class="form-group">
+              <label for="location">Where are you based?</label>
+              <input type="text" id="location" name="Location" placeholder="City, State" />
+            </div>
+            <div class="form-group">
+              <label for="team">Team size</label>
+              <input type="text" id="team" name="Team Size" placeholder="e.g. 8 staff + 12 commissioned agents" />
+            </div>
+            <div class="form-group">
+              <label for="system">Current accounting system</label>
+              <select id="system" name="Accounting System">
+                <option value="" selected disabled>Select one…</option>
+                <option>QuickBooks Online</option>
+                <option>QuickBooks Desktop</option>
+                <option>Xero</option>
+                <option>Excel / Google Sheets</option>
+                <option>Wave</option>
+                <option>Other</option>
+                <option>None yet</option>
+              </select>
+            </div>
+            <div class="form-group form-group--full">
+              <label for="poc">Who handles finance &amp; operations questions day to day?</label>
+              <input type="text" id="poc" name="Finance Point of Contact" placeholder="Name and role (optional)" />
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Conditional · Payroll & commission deep-dive ── -->
+        <section class="glass-card disc-section" id="section-payroll" hidden>
+          <div class="section-label">Payroll &amp; commissions</div>
+          <h2>How payroll &amp; commissions work today</h2>
+          <p class="disc-lead">
+            You flagged payroll or commission processing, so these help us scope it. If you run
+            agent or producer commissions (common for insurance agencies), tell us how that works
+            now: carrier statements, splits, the whole flow.
+          </p>
+
+          <div class="disc-grid">
+            <div class="form-group form-group--full">
+              <label for="pay-system">Do you run payroll today? Which system?</label>
+              <input type="text" id="pay-system" name="Payroll System"
+                placeholder="Gusto, ADP, QuickBooks Payroll, manual, none yet…" />
+            </div>
+            <div class="form-group form-group--full">
+              <label for="pay-method">How are payments / commissions made today?</label>
+              <input type="text" id="pay-method" name="Payment Method"
+                placeholder="Direct deposit, ACH, manual checks, something else…" />
+            </div>
+            <div class="form-group">
+              <label for="pay-count">How many people are paid each cycle?</label>
+              <input type="text" id="pay-count" name="People Paid Per Cycle" placeholder="e.g. 12 agents" />
+            </div>
+            <div class="form-group">
+              <label>How often are payouts run?</label>
+              <div class="choice-row" role="radiogroup" aria-label="Payout frequency">
+                <span class="choice"><input type="radio" id="freq-weekly" name="Payout Frequency" value="Weekly" /><label for="freq-weekly">Weekly</label></span>
+                <span class="choice"><input type="radio" id="freq-semi" name="Payout Frequency" value="Twice a month" /><label for="freq-semi">Twice a month</label></span>
+                <span class="choice"><input type="radio" id="freq-monthly" name="Payout Frequency" value="Monthly" /><label for="freq-monthly">Monthly</label></span>
+                <span class="choice"><input type="radio" id="freq-varies" name="Payout Frequency" value="Varies" /><label for="freq-varies">Varies</label></span>
+              </div>
+            </div>
+            <div class="form-group form-group--full">
+              <label for="pay-variability">How much does it vary from cycle to cycle?</label>
+              <textarea id="pay-variability" name="Cycle Variability" style="min-height:90px;"
+                placeholder="Does each person get paid the same way every time, or does it change based on what closed?"></textarea>
+            </div>
+            <div class="form-group form-group--full">
+              <label for="pay-calc">Walk us through how commissions are calculated</label>
+              <textarea id="pay-calc" name="Commission Calculation" style="min-height:110px;"
+                placeholder="What are the inputs (carrier reports, CRM data, spreadsheets), and who handles the math today?"></textarea>
+            </div>
+            <div class="form-group form-group--full">
+              <label for="pay-compliance">Any compliance or regulatory requirements we should know about?</label>
+              <textarea id="pay-compliance" name="Compliance Requirements" style="min-height:80px;"
+                placeholder="State insurance commissioner reporting, NAIC, licensing, 1099s…"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── 04 · Systems & access ── -->
+        <section class="glass-card disc-section reveal">
+          <div class="section-label">04 · Systems &amp; access</div>
+          <h2>Systems &amp; data</h2>
+          <p class="disc-lead">How you keep records, and how you'd want to work together.</p>
+
+          <div class="disc-grid">
+            <div class="form-group form-group--full">
+              <label for="records">Where do your financial &amp; payroll records live today?</label>
+              <input type="text" id="records" name="Where Records Live"
+                placeholder="Shared drive, CRM, spreadsheets, paper files…" />
+            </div>
+            <div class="form-group form-group--full">
+              <label>Comfortable collaborating in a shared folder (Google Drive, Dropbox) rather than handing files over?</label>
+              <div class="choice-row" role="radiogroup" aria-label="Shared folder comfort">
+                <span class="choice"><input type="radio" id="share-yes" name="Shared Folder Comfort" value="Yes" /><label for="share-yes">Yes</label></span>
+                <span class="choice"><input type="radio" id="share-maybe" name="Shared Folder Comfort" value="Maybe" /><label for="share-maybe">Maybe</label></span>
+                <span class="choice"><input type="radio" id="share-discuss" name="Shared Folder Comfort" value="Prefer to discuss" /><label for="share-discuss">Prefer to discuss</label></span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── 05 · Goals & timeline ── -->
+        <section class="glass-card disc-section reveal">
+          <div class="section-label">05 · Goals &amp; timeline</div>
+          <h2>What you're looking for</h2>
+          <p class="disc-lead">The most useful part. Tell us what's driving this.</p>
+
+          <div class="disc-grid">
+            <div class="form-group form-group--full">
+              <label for="reason">What's the main reason you're considering outside support right now?</label>
+              <textarea id="reason" name="Main Reason" style="min-height:90px;"
+                placeholder="Time, accuracy, growth, replacing someone who left, scaling for more agents…"></textarea>
+            </div>
+            <div class="form-group form-group--full">
+              <label for="future">Beyond that, anything else you'd want help with eventually?</label>
+              <input type="text" id="future" name="Future Needs"
+                placeholder="Bookkeeping, monthly reports, tax-prep coordination, dashboards…" />
+            </div>
+            <div class="form-group form-group--full">
+              <label>What's your timeline?</label>
+              <div class="choice-row" role="radiogroup" aria-label="Timeline">
+                <span class="choice"><input type="radio" id="time-asap" name="Timeline" value="As soon as possible" /><label for="time-asap">As soon as possible</label></span>
+                <span class="choice"><input type="radio" id="time-quarter" name="Timeline" value="This quarter" /><label for="time-quarter">This quarter</label></span>
+                <span class="choice"><input type="radio" id="time-year" name="Timeline" value="Later this year" /><label for="time-year">Later this year</label></span>
+                <span class="choice"><input type="radio" id="time-explore" name="Timeline" value="Just exploring" /><label for="time-explore">Just exploring</label></span>
+              </div>
+            </div>
+            <div class="form-group form-group--full">
+              <label for="anything">Anything else you'd want us to know?</label>
+              <textarea id="anything" name="Anything Else" style="min-height:90px;"
+                placeholder="Concerns, preferences, things that have gone wrong with prior providers, whatever feels relevant."></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Submit ── -->
+        <div class="disc-submit-row reveal">
+          <button type="submit" class="btn btn-primary" id="disc-submit">
+            Send to Astral Tech Advisors <span aria-hidden="true">→</span>
+          </button>
+          <p class="disc-privacy">
+            We treat everything you share as confidential and use it only to prepare for our
+            conversation. This goes straight to our team at contact@astraltechadvisors.com.
+          </p>
+        </div>
+      </form>
+
+      <!-- ── Success panel (revealed after submit) ── -->
+      <div class="landing-cta disc-success" id="disc-success" hidden>
+        <div class="disc-success-icon" aria-hidden="true">✦</div>
+        <h2>Thank you, <span class="gradient-text">we've got it.</span></h2>
+        <p>
+          Your workbook is on its way to our team. We'll review it and reach out within
+          1-2 business days. Want to grab time sooner? Book a call below.
+        </p>
+        <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
+          <a href="https://calendly.com/contact-astraltechadvisors/30min" target="_blank" rel="noopener"
+            class="btn btn-primary">Book a Call <span aria-hidden="true">→</span></a>
+          <a href="index.html" class="btn btn-ghost">Back to Home</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="padding-top:2rem;border-top:1px solid rgba(255,255,255,0.08)">
+        <span>© 2026 Astral Tech Advisors. All rights reserved.</span>
+        <a href="mailto:contact@astraltechadvisors.com">contact@astraltechadvisors.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+
+  <!-- ============================================================
+       DISCOVERY-PAGE LOGIC
+       Conditional reveal + Formspree submit (mirrors main.js pattern)
+       ============================================================ -->
+  <script>
+    (function initDiscovery() {
+      const form = document.getElementById('discovery-form');
+      if (!form) return;
+
+      /* Reveal the payroll/commission deep-dive only when that interest is checked */
+      const payrollToggle = document.getElementById('interest-payroll');
+      const payrollSection = document.getElementById('section-payroll');
+      function syncPayroll() {
+        const show = payrollToggle.checked;
+        payrollSection.hidden = !show;
+        if (show) { payrollSection.classList.add('visible'); }
+      }
+      payrollToggle.addEventListener('change', syncPayroll);
+      syncPayroll();
+
+      /* Submit → Formspree (same endpoint as the contact form, distinct subject) */
+      const btn = document.getElementById('disc-submit');
+      const successPanel = document.getElementById('disc-success');
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const original = btn.innerHTML;
+        btn.innerHTML = 'Sending… ⟳';
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+
+        fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        })
+        .then(function (res) {
+          if (res.ok) {
+            form.hidden = true;
+            successPanel.hidden = false;
+            successPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          } else {
+            btn.innerHTML = 'Something went wrong. Try again';
+            btn.style.opacity = '1';
+            btn.disabled = false;
+            setTimeout(function () { btn.innerHTML = original; }, 3500);
+          }
+        })
+        .catch(function () {
+          btn.innerHTML = 'Network error. Try again';
+          btn.style.opacity = '1';
+          btn.disabled = false;
+          setTimeout(function () { btn.innerHTML = original; }, 3500);
+        });
+      });
+    })();
+  </script>
+</body>
+
+</html>
